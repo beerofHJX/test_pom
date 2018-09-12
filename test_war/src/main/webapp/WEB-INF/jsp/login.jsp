@@ -37,7 +37,7 @@
 <body id="login">
 <div id="login-wrapper" class="png_bg">
     <div id="login-top">
-        <h1>OA办公自动化系统</h1>
+        <h1>假的OA办公自动化系统</h1>
         <!-- Logo (221px width) -->
         <a href="#"><img id="logo" src="resources/images/logo.png"
                          alt="Simpla Admin logo" /></a>
