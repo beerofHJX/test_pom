@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <!-- smtp服务的地址 -->
+        <property name="host" value="smtp.sina.cn"/>
+        <property name="protocol" value="smtp"/>
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="username" value="verygoodwlk@sina.cn"/>
+        <property name="password" value="ken123456"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+            </props>
+        </property>
+
+    </bean>
+
+</beans>

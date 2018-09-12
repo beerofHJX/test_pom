@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.qf.oa.realm"/>
+
+    <!-- =========================================================
+         Shiro Core Components - Not Spring Specific
+         ========================================================= -->
+    <!-- Shiro's main business-tier object for web-enabled applications
+         (use DefaultSecurityManager instead when there is no web environment)-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="sessionMode" value="native"/>
+        <property name="realm" ref="myRealm"/>
+    </bean>
+
+
+    <!-- =========================================================
+         Shiro Spring-specific integration
+         ========================================================= -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- Enable Shiro Annotations for Spring-configured beans.  Only run after
+         the lifecycleBeanProcessor has run: -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- Secure Spring remoting:  Ensure any Spring Remoting method invocations can be associated
+         with a Subject for security checks. -->
+    <bean id="secureRemoteInvocationExecutor" class="org.apache.shiro.spring.remoting.SecureRemoteInvocationExecutor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- shiro核心的过滤器Bean-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 去登录页面的url -->
+        <property name="loginUrl" value="/index/login"/>
+        <!-- 登录成功之后去到的页面
+        <property name="successUrl" value="/s/index"/>-->
+        <!-- 没有授权的页面
+        <property name="unauthorizedUrl" value="/s/unauthorized"/>-->
+
+        <!-- shiro的过滤器 - 过滤规则
+            常用的过滤器：
+            authc：必须认证才能通过
+            anon：游客可以通过
+            logout：注销的请求
+         -->
+        <property name="filterChainDefinitions">
+            <value>
+                /resources/**=anon
+                /login=anon
+                /oa/logout=logout
+                /**=authc
+            </value>
+        </property>
+    </bean>
+
+</beans>
